@@ -5,143 +5,15 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { FetchDataNft } from '../hook/fetchDataMysteryBox';
 import CardShoes from './CardShoes';
 
+// import { useBuyNFT } from '../hook/useBuyNFT';
+import { useApprove } from '../hook/useApprove';
+
 interface Props {
     filter?: number;
     query?: string;
 }
 const ListShoes: React.FC<Props> = () => {
-    // const currentItems = [
-    //     {
-    //         token_id: 1,
-    //         name: "FlyingDoge NFT - Testnet",
-    //
-    //         image: "/images/luckybox/box0.png",
-    //         comfy: "5",
-    //         efficiency: "5",
-    //         luck: "5",
-    //         sturdence_remain: "5",
-    //         nftType: "5",
-    //         energy_mining: "5",
-    //         mininghydro: "5",
-    //         energy: "5",
-    //         sneaker_config: [
-    //             {
-    //                 value: 100
-    //             },
-    //             {
-    //                 value: 100
-    //             }
-    //         ],
-    //         sturdence: 7,
-    //         quantity: 0,
-    //         type: "3"
-    //     },
-    // ]
-
-    // const { account, chainId } = useActiveWeb3React()
-    // How to get data from blockchain <<<<
-    // const { nftBalance } = FetchDataNft(account, chainId)
-    // currentItems[0].quantity = nftBalance;
-
-    const Items = [
-        {
-            token_id: 1,
-            name: 'FlyingDoge NFT - Testnet',
-            image: '/images/luckybox/box4.png',
-            comfy: '5',
-            efficiency: '5',
-            luck: '5',
-            sturdence_remain: '5',
-            nftType: '5',
-            energy_mining: '5',
-            mininghydro: '5',
-            energy: '5',
-            sneaker_config: [
-                {
-                    value: 100,
-                },
-                {
-                    value: 100,
-                },
-            ],
-            sturdence: 7,
-            quantity: 0,
-            type: '3',
-        },
-        {
-            token_id: 2,
-            name: 'FlyingDoge NFT - Testnet',
-            image: '/images/luckybox/box5.png',
-            comfy: '5',
-            efficiency: '5',
-            luck: '5',
-            sturdence_remain: '5',
-            nftType: '5',
-            energy_mining: '5',
-            mininghydro: '5',
-            energy: '5',
-            sneaker_config: [
-                {
-                    value: 100,
-                },
-                {
-                    value: 100,
-                },
-            ],
-            sturdence: 7,
-            quantity: 0,
-            type: '3',
-        },
-        {
-            token_id: 3,
-            name: 'FlyingDoge NFT - Testnet',
-            image: '/images/luckybox/box6.png',
-            comfy: '5',
-            efficiency: '5',
-            luck: '5',
-            sturdence_remain: '5',
-            nftType: '5',
-            energy_mining: '5',
-            mininghydro: '5',
-            energy: '5',
-            sneaker_config: [
-                {
-                    value: 100,
-                },
-                {
-                    value: 100,
-                },
-            ],
-            sturdence: 7,
-            quantity: 0,
-            type: '3',
-        },
-        {
-            token_id: 4,
-            name: 'FlyingDoge NFT - Testnet',
-            image: '/images/luckybox/box0.png',
-            comfy: '5',
-            efficiency: '5',
-            luck: '5',
-            sturdence_remain: '5',
-            nftType: '5',
-            energy_mining: '5',
-            mininghydro: '5',
-            energy: '5',
-            sneaker_config: [
-                {
-                    value: 100,
-                },
-                {
-                    value: 100,
-                },
-            ],
-            sturdence: 7,
-            quantity: 0,
-            type: '3',
-        },
-    ];
-
+    const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
     const currentItems = [
         {
             token_id: 0,
@@ -217,14 +89,8 @@ const ListShoes: React.FC<Props> = () => {
         },
     ];
 
-    const randomBoxItem = (props) => {
-        console.log(props);
-        const { nftName, nftType, nftImage } = props;
-        const itemId = Math.floor(Math.random() * 4) + 1;
-        console.log(nftType);
-
-        console.log(nftName);
-        console.log(itemId);
+    const onHandleApprove = () => {
+        handleApprove();
     };
 
     return (
@@ -241,7 +107,7 @@ const ListShoes: React.FC<Props> = () => {
                                     nftType={item.nftType}
                                     speed={item.sneaker_config[1].value}
                                     quantity={item.quantity}
-                                    randomBoxItem={randomBoxItem}
+                                    handleApprove1={onHandleApprove}
                                 />
                             );
                         })}

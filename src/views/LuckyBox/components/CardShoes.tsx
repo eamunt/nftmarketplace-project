@@ -21,9 +21,11 @@ interface PropsCard {
     nftName?: string;
     nftImage?: string;
     nftType?: string;
+    nftPrice?: any;
     speed?: number;
     quantity?: number;
-    randomBoxItem?: any;
+    handleApprove1?: any;
+    onBuyItem?: any;
 }
 
 const CardShoes: React.FC<PropsCard> = ({
@@ -31,12 +33,13 @@ const CardShoes: React.FC<PropsCard> = ({
     nftName,
     nftImage,
     nftType,
+    nftPrice,
     speed,
     quantity,
-    randomBoxItem,
+    onBuyItem,
+    handleApprove1,
 }) => {
     const { t } = useTranslation();
-    console.log(randomBoxItem);
     return (
         <>
             <Container>
@@ -50,13 +53,8 @@ const CardShoes: React.FC<PropsCard> = ({
                         </ContainerTags>
                     </Flex>
                 </Flex>
-                <Button
-                    onClick={() => {
-                        randomBoxItem({ nftName, nftType, nftImage });
-                    }}
-                >
-                    BUY
-                </Button>
+                <Button onClick={handleApprove1}>Approve</Button>
+                <Button onClick={onBuyItem}>{nftPrice}</Button>
             </Container>
         </>
     );
