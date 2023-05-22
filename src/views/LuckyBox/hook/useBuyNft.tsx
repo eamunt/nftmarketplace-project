@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react';
 import { getAddress } from 'utils/addressHelpers';
 import BigNumber from 'bignumber.js';
 
-export const useBuyNFT = (chainId: number, onRefresh, balance) => {
+export const useBuyNFT = (chainId: number, onRefresh, tokenI) => {
     const [requestedBuy, setRequestBuy] = useState(false);
     const { toastSuccess, toastError } = useToast();
     const { callWithMarketGasPrice } = useCallWithMarketGasPrice();
@@ -22,7 +22,7 @@ export const useBuyNFT = (chainId: number, onRefresh, balance) => {
             // const strValue = new BigNumber(balance).multipliedBy(10 ** 18).toString();
             // console.log(strValue);
 
-            const tx = await callWithMarketGasPrice(marketPlaceContract, 'buyItem', [1]);
+            const tx = await callWithMarketGasPrice(marketPlaceContract, 'buyItem', [tokenI]);
             // console.log(tx);
             const receipt = await tx.wait();
             if (receipt.status) {
@@ -32,7 +32,6 @@ export const useBuyNFT = (chainId: number, onRefresh, balance) => {
                 onRefresh(Date.now());
             } else {
                 // user rejected tx or didn't go thru
-                console.error('hello', receipt.status);
                 toastError(
                     t('Error'),
                     t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
@@ -40,7 +39,6 @@ export const useBuyNFT = (chainId: number, onRefresh, balance) => {
                 setRequestBuy(false);
             }
         } catch (e) {
-            console.error(e);
             toastError(
                 t('Error'),
                 t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
@@ -48,7 +46,7 @@ export const useBuyNFT = (chainId: number, onRefresh, balance) => {
         } finally {
             setPendingBuy(false);
         }
-    }, [callWithMarketGasPrice, marketPlaceContract, balance, toastSuccess, t, toastError]);
+    }, [callWithMarketGasPrice, marketPlaceContract, tokenI, toastSuccess, t, toastError]);
 
     return { handleBuy, requestedBuy, pendingBuy, isCloseBuy };
 };

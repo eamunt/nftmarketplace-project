@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Button } from '@pancakeswap/uikit';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import { FetchDataNft } from '../hook/fetchDataMysteryBox';
 import CardShoes from './CardShoes';
 
 import { useBuyNFT } from '../hook/useBuyNft';
@@ -19,10 +18,9 @@ const ListShoes: React.FC<Props> = () => {
         setRefresh(newValue);
     }
 
-    const [balance, setBalance] = useState('10');
+    const [tokenI, setTokenI] = useState(0);
     const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
-    const { handleBuy } = useBuyNFT(chainId, onRefresh, balance);
-
+    const { handleBuy } = useBuyNFT(chainId, onRefresh, tokenI);
     const currentItems = [
         {
             token_id: 0,
@@ -44,7 +42,7 @@ const ListShoes: React.FC<Props> = () => {
             luck: '0',
             sturdence_remain: '0',
             nftType: '0',
-            nftPrice: 1,
+            nftPrice: 3,
         },
         {
             token_id: 2,
@@ -55,14 +53,15 @@ const ListShoes: React.FC<Props> = () => {
             luck: '0',
             sturdence_remain: '0',
             nftType: '0',
-            nftPrice: 1,
+            nftPrice: 5,
         },
     ];
 
     const onHandleApprove = () => {
         handleApprove();
     };
-    const onHandleBuyItem = () => {
+    const onHandleBuyItem = ({ ID }) => {
+        setTokenI(ID);
         handleBuy();
     };
 
