@@ -5,7 +5,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { FetchDataNft } from '../hook/fetchDataMysteryBox';
 import CardShoes from './CardShoes';
 
-// import { useBuyNFT } from '../hook/useBuyNFT';
+import { useBuyNFT } from '../hook/useBuyNft';
 import { useApprove } from '../hook/useApprove';
 
 interface Props {
@@ -13,7 +13,16 @@ interface Props {
     query?: string;
 }
 const ListShoes: React.FC<Props> = () => {
+    const { account, chainId } = useActiveWeb3React();
+    const [refresh, setRefresh] = useState(0);
+    function onRefresh(newValue: number) {
+        setRefresh(newValue);
+    }
+
+    const [balance, setBalance] = useState('10');
     const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
+    const { handleBuy } = useBuyNFT(chainId, onRefresh, balance);
+
     const currentItems = [
         {
             token_id: 0,
@@ -24,20 +33,7 @@ const ListShoes: React.FC<Props> = () => {
             luck: '0',
             sturdence_remain: '0',
             nftType: 'haha',
-            energy_mining: '0',
-            mininghydro: '0',
-            energy: '0',
-            sneaker_config: [
-                {
-                    value: 0,
-                },
-                {
-                    value: 0,
-                },
-            ],
-            sturdence: 0,
-            quantity: 0,
-            type: '',
+            nftPrice: 1,
         },
         {
             token_id: 1,
@@ -48,20 +44,7 @@ const ListShoes: React.FC<Props> = () => {
             luck: '0',
             sturdence_remain: '0',
             nftType: '0',
-            energy_mining: '0',
-            mininghydro: '0',
-            energy: '0',
-            sneaker_config: [
-                {
-                    value: 0,
-                },
-                {
-                    value: 0,
-                },
-            ],
-            sturdence: 0,
-            quantity: 0,
-            type: '',
+            nftPrice: 1,
         },
         {
             token_id: 2,
@@ -72,25 +55,15 @@ const ListShoes: React.FC<Props> = () => {
             luck: '0',
             sturdence_remain: '0',
             nftType: '0',
-            energy_mining: '0',
-            mininghydro: '0',
-            energy: '0',
-            sneaker_config: [
-                {
-                    value: 0,
-                },
-                {
-                    value: 0,
-                },
-            ],
-            sturdence: 0,
-            quantity: 0,
-            type: '',
+            nftPrice: 1,
         },
     ];
 
     const onHandleApprove = () => {
         handleApprove();
+    };
+    const onHandleBuyItem = () => {
+        handleBuy();
     };
 
     return (
@@ -105,9 +78,11 @@ const ListShoes: React.FC<Props> = () => {
                                     nftName={item.name}
                                     nftImage={item.image}
                                     nftType={item.nftType}
-                                    speed={item.sneaker_config[1].value}
-                                    quantity={item.quantity}
+                                    nftPrice={item.nftPrice}
+                                    // speed={item.sneaker_config[1].value}
+                                    // quantity={item.quantity}
                                     handleApprove1={onHandleApprove}
+                                    onBuyItem={onHandleBuyItem}
                                 />
                             );
                         })}

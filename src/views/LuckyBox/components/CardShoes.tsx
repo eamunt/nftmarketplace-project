@@ -39,7 +39,6 @@ const CardShoes: React.FC<PropsCard> = ({
     onBuyItem,
     handleApprove1,
 }) => {
-    const { t } = useTranslation();
     return (
         <>
             <Container>
@@ -54,7 +53,13 @@ const CardShoes: React.FC<PropsCard> = ({
                     </Flex>
                 </Flex>
                 <Button onClick={handleApprove1}>Approve</Button>
-                <Button onClick={onBuyItem}>{nftPrice}</Button>
+                <Button
+                    onClick={() => {
+                        onBuyItem();
+                    }}
+                >
+                    {nftPrice}
+                </Button>
             </Container>
         </>
     );
@@ -93,6 +98,12 @@ const ImgShoes = styled.img`
 `;
 const CustomText = styled(Text)`
     color: #000000;
+    display: flex;
+    align-item: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
 `;
 const ContainerRow = styled.div`
     align-items: center;
