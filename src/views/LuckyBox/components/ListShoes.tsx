@@ -70,7 +70,7 @@ const ListShoes: React.FC<Props> = () => {
             <CsFlex>
                 {currentItems?.length !== 0 ? (
                     <>
-                        {currentItems.map((item, index) => {
+                        {currentItems.map((item) => {
                             return (
                                 <CardShoes
                                     ID={item.token_id}

@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { getAddress } from 'utils/addressHelpers';
 import contracts from 'config/constants/contracts';
 import multicall from 'utils/multicall';
@@ -67,4 +68,58 @@ export const FetchDataNft = (account: string, chainId: number) => {
         fetchDataBox();
     }, [account]);
     return { nftBalance };
+};
+
+export const FetchNFTBalance = (account: string, chainId: number) => {
+    const [nftBalance, setNftBalance] = useState(0);
+    useEffect(() => {
+        const fetchDataBox = async () => {
+            try {
+                const callBoxId = [
+                    {
+                        address: getAddress(contracts.coreBuyNFT, chainId),
+                        name: 'balanceOf',
+                        params: [account],
+                    },
+                ];
+                const idRunBox = await multicall(coreBuyNFTAbi, callBoxId, chainId);
+                const index = new BigNumber(idRunBox.toString()).toNumber();
+
+                setNftBalance(index);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        fetchDataBox();
+    }, [account]);
+
+    return { nftBalance };
+};
+
+export const TokenIdArray = (account: string, chainId: number) => {
+    const [tokenIdArr, setTokenId] = useState([]);
+    const { nftBalance } = FetchNFTBalance(account, chainId);
+    const arr = [];
+    useEffect(() => {
+        const fetchDataBox = async () => {
+            for (let i = 0; i < nftBalance; i++) {
+                const callBoxId = [
+                    {
+                        address: getAddress(contracts.coreBuyNFT, chainId),
+                        name: 'tokenOfOwnerByIndex',
+                        params: [account, i],
+                    },
+                ];
+                const idRunBox = await multicall(coreBuyNFTAbi, callBoxId, chainId);
+                const index = new BigNumber(idRunBox.toString()).toNumber();
+                // setTokenId(index);
+                arr.push(index);
+                // console.log('arr', arr);
+            }
+            setTokenId(arr);
+        };
+        fetchDataBox();
+    }, [account, arr, chainId, nftBalance]);
+
+    return { tokenIdArr };
 };

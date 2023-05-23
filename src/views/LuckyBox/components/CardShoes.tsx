@@ -26,6 +26,7 @@ interface PropsCard {
     quantity?: number;
     handleApprove1?: any;
     onBuyItem?: any;
+    getNFTBalance?: any;
 }
 
 const CardShoes: React.FC<PropsCard> = ({
@@ -38,6 +39,7 @@ const CardShoes: React.FC<PropsCard> = ({
     quantity,
     onBuyItem,
     handleApprove1,
+    getNFTBalance,
 }) => {
     return (
         <>
