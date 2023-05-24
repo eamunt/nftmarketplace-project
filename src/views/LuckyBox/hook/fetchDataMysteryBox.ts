@@ -96,9 +96,8 @@ export const FetchNFTBalance = (account: string, chainId: number) => {
     return { nftBalance };
 };
 
-export const TokenIdArray = (account: string, chainId: number) => {
+export const TokenIdArray = (account: string, chainId: number, nftBalance: number) => {
     const [tokenIdArr, setTokenId] = useState([]);
-    const { nftBalance } = FetchNFTBalance(account, chainId);
     const arr = [];
     useEffect(() => {
         const fetchDataBox = async () => {
@@ -119,7 +118,35 @@ export const TokenIdArray = (account: string, chainId: number) => {
             setTokenId(arr);
         };
         fetchDataBox();
-    }, [account, arr, chainId, nftBalance]);
+    }, [account, chainId, nftBalance]);
 
     return { tokenIdArr };
+};
+
+export const GetPriceNft = (chainId: number) => {
+    const [priceArr, setPriceArr] = useState([]);
+    const arr = [];
+    useEffect(() => {
+        const fetchDataBox = async () => {
+            for (let i = 0; i < 3; i++) {
+                const callBoxId = [
+                    {
+                        address: getAddress(contracts.coreBuyNFT, chainId),
+                        name: 'NFT_PRICE',
+                        params: [i],
+                    },
+                ];
+                const idRunBox = await multicall(coreBuyNFTAbi, callBoxId, chainId);
+                const index = new BigNumber(idRunBox.toString()).toNumber();
+                // setTokenId(index);
+                arr.push(index / 1e18);
+                console.log(i, arr);
+            }
+
+            setPriceArr(arr);
+        };
+        fetchDataBox();
+    }, []);
+
+    return { priceArr };
 };

@@ -123,6 +123,6 @@ export default {
         97: '0x5DabAC878E394C7c6fBE1860F8dAC12A5E2A821e',
         1945: '',
         1975: '',
-        1116: '0x6Cab4A1c5ec3C8ab63ff8C4e5cb802207745471e',
+        1116: '0x080c9Ec00E41028041C98c6cCcEA87b711Db9F6c',
     },
 };

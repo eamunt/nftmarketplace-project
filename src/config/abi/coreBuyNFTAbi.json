@@ -296,6 +296,25 @@
         "outputs": [
             {
                 "name": "",
+                "internalType": "uint256[]",
+                "type": "uint256[]"
+            }
+        ],
+        "inputs": [
+            {
+                "name": "_owner",
+                "internalType": "address",
+                "type": "address"
+            }
+        ],
+        "name": "getRemainingNFTTypes",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "outputs": [
+            {
+                "name": "",
                 "internalType": "bool",
                 "type": "bool"
             }
@@ -326,6 +345,25 @@
         ],
         "inputs": [],
         "name": "name",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "outputs": [
+            {
+                "name": "",
+                "internalType": "uint256",
+                "type": "uint256"
+            }
+        ],
+        "inputs": [
+            {
+                "name": "",
+                "internalType": "uint256",
+                "type": "uint256"
+            }
+        ],
+        "name": "nftArray",
         "stateMutability": "view",
         "type": "function"
     },

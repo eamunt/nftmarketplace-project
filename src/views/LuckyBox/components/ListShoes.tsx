@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Text, Flex, Button } from '@pancakeswap/uikit';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import CardShoes from './CardShoes';
+import { GetPriceNft } from '../hook/fetchDataMysteryBox';
 
 import { useBuyNFT } from '../hook/useBuyNft';
 import { useApprove } from '../hook/useApprove';
@@ -14,48 +15,40 @@ interface Props {
 const ListShoes: React.FC<Props> = () => {
     const { account, chainId } = useActiveWeb3React();
     const [refresh, setRefresh] = useState(0);
+    // const { nftBalance } = FetchNFTBalance(account, chainId);
+    const { priceArr } = GetPriceNft(chainId);
+    console.log('pri', priceArr);
+    const [currentItems, setCurrentItems] = useState([]);
     function onRefresh(newValue: number) {
         setRefresh(newValue);
     }
+    const arr = [];
+    const nameArray = ['Silver', 'Gold', 'Ruby'];
+    useEffect(() => {
+        priceArr.forEach((price, i) => {
+            const temp = {
+                token_id: i,
+                name: `${nameArray[i]} box - Testnet ${i}`,
+                image: `/images/luckybox/box${i}.png`,
+                comfy: '0',
+                efficiency: '0',
+                luck: '0',
+                sturdence_remain: '0',
+                nftType: 'haha',
+                nftPrice: price,
+            };
+            arr.push(temp);
+        });
+        setCurrentItems(arr);
+    }, [priceArr]);
+
+    currentItems.forEach((j) => {
+        console.log(j);
+    });
 
     const [tokenI, setTokenI] = useState(0);
     const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
     const { handleBuy } = useBuyNFT(chainId, onRefresh, tokenI);
-    const currentItems = [
-        {
-            token_id: 0,
-            name: 'FlyingDoge NFT - Testnet 1',
-            image: '/images/luckybox/box0.png',
-            comfy: '0',
-            efficiency: '0',
-            luck: '0',
-            sturdence_remain: '0',
-            nftType: 'haha',
-            nftPrice: 1,
-        },
-        {
-            token_id: 1,
-            name: 'FlyingDoge NFT - Testnet 2',
-            image: '/images/luckybox/box1.png',
-            comfy: '0',
-            efficiency: '0',
-            luck: '0',
-            sturdence_remain: '0',
-            nftType: '0',
-            nftPrice: 3,
-        },
-        {
-            token_id: 2,
-            name: 'FlyingDoge NFT - Testnet 3',
-            image: '/images/luckybox/box2.png',
-            comfy: '0',
-            efficiency: '0',
-            luck: '0',
-            sturdence_remain: '0',
-            nftType: '0',
-            nftPrice: 5,
-        },
-    ];
 
     const onHandleApprove = () => {
         handleApprove();
