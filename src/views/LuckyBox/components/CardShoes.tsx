@@ -48,9 +48,9 @@ const CardShoes: React.FC<PropsCard> = ({
     // console.log('hhi', nftType);
     return (
         <>
-            <Container>
+            <Container background={renderBGCard(Number(nftType))}>
                 <Flex width="100%" flexDirection="column">
-                    <CustomCard background={renderBGCard(Number(nftType))}>
+                    <CustomCard>
                         <ImgShoes src={nftImage} alt="Image Box" />
                     </CustomCard>
                     <Flex marginTop="10px" width="100%" justifyContent="space-between" alignItems="center">
@@ -89,7 +89,8 @@ const Container = styled.div<{ isHaving?: boolean; background?: string }>`
     @media screen and (max-width: 600px) {
         padding: 15px 0px 15px 0px;
     }
-    background-color: #dbdfea;
+    background-color: ${(props) => props.background};
+    background-image: ${(props) => props.background};
 `;
 const CustomCard = styled.div<{ background?: string }>`
     display: flex;
@@ -127,15 +128,15 @@ const ContainerProgress = styled.div`
     width: 100%;
 `;
 const ContainerTags = styled(Flex)<{ background?: string }>`
-    border-radius: 6px;
+    border-radius: 20px;
     width: 100%;
     height: auto;
-    justify-content: start;
-    padding: 6px 0px 6px 10px;
+    justify-content: center;
+    padding: 6px 0px 6px 0px;
     align-items: center;
     margin-bottom: 10px;
     ${Text} {
-        font-size: 16px;
+        font-size: 20px;
         font-weight: bold;
     }
 `;
@@ -143,7 +144,7 @@ const ContainerTags = styled(Flex)<{ background?: string }>`
 const Button = styled.button`
     width: 100%;
     padding: 12px;
-    background-color: #8294c4;
+    background-color: #2a4cbf;
     margin-top: 10px;
     cursor: pointer;
     border-radius: 20px;
