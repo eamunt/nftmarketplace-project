@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Button } from '@pancakeswap/uikit';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import CardShoes from './CardShoes';
-import { GetPriceNft } from '../hook/fetchDataMysteryBox';
+import { FetchNFTBalance, GetAllowance, GetPriceNft, GetTokenBalanceOf } from '../hook/fetchDataMysteryBox';
 
-import { useBuyNFT } from '../hook/useBuyNft';
 import { useApprove } from '../hook/useApprove';
+import { useBuyNFT } from '../hook/useBuyNft';
 
 interface Props {
     filter?: number;
@@ -15,10 +15,13 @@ interface Props {
 const ListShoes: React.FC<Props> = () => {
     const { account, chainId } = useActiveWeb3React();
     const [refresh, setRefresh] = useState(0);
-    // const { nftBalance } = FetchNFTBalance(account, chainId);
+    const { nftBalance } = FetchNFTBalance(account, chainId);
     const { priceArr } = GetPriceNft(chainId);
-    console.log('pri', priceArr);
+    // console.log('pri', priceArr);
     const [currentItems, setCurrentItems] = useState([]);
+    const { allowanceVar } = GetAllowance(account, '0xC24899C146835c6566629652152eae44210A96F6', chainId);
+    const { tokenBalanceOf } = GetTokenBalanceOf(account, chainId);
+    // console.log('tokenBalanceOf', tokenBalanceOf);
     function onRefresh(newValue: number) {
         setRefresh(newValue);
     }
@@ -27,14 +30,14 @@ const ListShoes: React.FC<Props> = () => {
     useEffect(() => {
         priceArr.forEach((price, i) => {
             const temp = {
-                token_id: i,
-                name: `${nameArray[i]} box - Testnet ${i}`,
+                ID: i,
+                name: `${nameArray[i]} box`,
                 image: `/images/luckybox/box${i}.png`,
                 comfy: '0',
                 efficiency: '0',
                 luck: '0',
                 sturdence_remain: '0',
-                nftType: 'haha',
+                nftType: i,
                 nftPrice: price,
             };
             arr.push(temp);
@@ -42,21 +45,28 @@ const ListShoes: React.FC<Props> = () => {
         setCurrentItems(arr);
     }, [priceArr]);
 
-    currentItems.forEach((j) => {
-        console.log(j);
-    });
-
-    const [tokenI, setTokenI] = useState(0);
+    // currentItems.forEach((j) => {
+    //     console.log(j);
+    // });
+    const [tyToken, setTyToken] = useState(-1);
     const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
-    const { handleBuy } = useBuyNFT(chainId, onRefresh, tokenI);
-
+    const { handleBuy } = useBuyNFT(chainId, onRefresh, tyToken);
+    // console.log('baba 0.3');
     const onHandleApprove = () => {
         handleApprove();
     };
-    const onHandleBuyItem = ({ ID }) => {
-        setTokenI(ID);
-        handleBuy();
+    const onHandleBuyItem = ({ nftType }) => {
+        console.log('baba 0');
+        setTyToken(nftType);
     };
+
+    useEffect(() => {
+        console.log('baba');
+        if (tyToken > -1) {
+            handleBuy();
+            setTyToken(-1);
+        }
+    }, [tyToken]);
 
     return (
         <CsFlexContainer width="100%" flexDirection="column" mt="3rem" height="auto" minHeight="50vh">
@@ -71,6 +81,8 @@ const ListShoes: React.FC<Props> = () => {
                                     nftImage={item.image}
                                     nftType={item.nftType}
                                     nftPrice={item.nftPrice}
+                                    allowanceVar1={allowanceVar}
+                                    tokenBalanceOf1={tokenBalanceOf}
                                     // speed={item.sneaker_config[1].value}
                                     // quantity={item.quantity}
                                     handleApprove1={onHandleApprove}

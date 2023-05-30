@@ -27,6 +27,8 @@ interface PropsCard {
     handleApprove1?: any;
     onBuyItem?: any;
     getNFTBalance?: any;
+    allowanceVar1?: number;
+    tokenBalanceOf1?: number;
 }
 
 const CardShoes: React.FC<PropsCard> = ({
@@ -40,7 +42,10 @@ const CardShoes: React.FC<PropsCard> = ({
     onBuyItem,
     handleApprove1,
     getNFTBalance,
+    allowanceVar1,
+    tokenBalanceOf1,
 }) => {
+    // console.log('hhi', nftType);
     return (
         <>
             <Container>
@@ -54,10 +59,12 @@ const CardShoes: React.FC<PropsCard> = ({
                         </ContainerTags>
                     </Flex>
                 </Flex>
-                <Button onClick={handleApprove1}>Approve</Button>
+                {allowanceVar1 < nftPrice && tokenBalanceOf1 >= nftPrice ? (
+                    <Button onClick={handleApprove1}>Approve</Button>
+                ) : null}
                 <Button
                     onClick={() => {
-                        onBuyItem({ ID });
+                        onBuyItem({ nftType });
                     }}
                 >
                     {nftPrice}

@@ -123,6 +123,13 @@ export default {
         97: '0x5DabAC878E394C7c6fBE1860F8dAC12A5E2A821e',
         1945: '',
         1975: '',
-        1116: '0x080c9Ec00E41028041C98c6cCcEA87b711Db9F6c',
+        1116: '0xC24899C146835c6566629652152eae44210A96F6',
+    },
+    coreToken: {
+        56: '',
+        97: '0x5DabAC878E394C7c6fBE1860F8dAC12A5E2A821e',
+        1945: '',
+        1975: '',
+        1116: '0x585b34473CEac1D60BD9B9381D6aBaF122008504',
     },
 };

@@ -4,11 +4,11 @@ import { ToastDescriptionWithTx } from 'components/Toast';
 import contract from 'config/constants/contracts';
 import { useCallWithMarketGasPrice } from 'hooks/useCallWithMarketGasPrice';
 import { useCoreBuyNFT } from 'hooks/useContract';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAddress } from 'utils/addressHelpers';
-import BigNumber from 'bignumber.js';
 
-export const useBuyNFT = (chainId: number, onRefresh, tokenI) => {
+export const useBuyNFT = (chainId: number, onRefresh, tyToken) => {
+    console.log('tyToken', tyToken);
     const [requestedBuy, setRequestBuy] = useState(false);
     const { toastSuccess, toastError } = useToast();
     const { callWithMarketGasPrice } = useCallWithMarketGasPrice();
@@ -16,20 +16,26 @@ export const useBuyNFT = (chainId: number, onRefresh, tokenI) => {
     const { t } = useTranslation();
     const marketPlaceContract = useCoreBuyNFT(getAddress(contract.coreBuyNFT, chainId));
     const [pendingBuy, setPendingBuy] = useState(false);
+    console.log('--- buyitem 1', tyToken);
     const handleBuy = useCallback(async () => {
         setPendingBuy(true);
         try {
             // const strValue = new BigNumber(balance).multipliedBy(10 ** 18).toString();
             // console.log(strValue);
-
-            const tx = await callWithMarketGasPrice(marketPlaceContract, 'buyItem', [tokenI]);
+            console.log('buyitem 2', tyToken);
+            const tx = await callWithMarketGasPrice(marketPlaceContract, 'buyItem', [tyToken]);
+            console.log('buyitem 3', tyToken);
             // console.log(tx);
             const receipt = await tx.wait();
             if (receipt.status) {
-                toastSuccess(t('Successfully buy'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />);
+                toastSuccess(
+                    t(`Successfully buy ${tyToken}`),
+                    <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
+                );
                 setClose(true);
                 setRequestBuy(true);
                 onRefresh(Date.now());
+                console.log('buyitem 4', tyToken);
             } else {
                 // user rejected tx or didn't go thru
                 toastError(
@@ -46,7 +52,7 @@ export const useBuyNFT = (chainId: number, onRefresh, tokenI) => {
         } finally {
             setPendingBuy(false);
         }
-    }, [callWithMarketGasPrice, marketPlaceContract, tokenI, toastSuccess, t, toastError]);
+    }, [callWithMarketGasPrice, marketPlaceContract, tyToken, toastSuccess, t, toastError]);
 
     return { handleBuy, requestedBuy, pendingBuy, isCloseBuy };
 };

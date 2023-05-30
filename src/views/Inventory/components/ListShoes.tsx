@@ -21,7 +21,7 @@ const ListShoes: React.FC<Props> = () => {
         tokenIdArr.forEach((number) => {
             const temp = {
                 token_id: number,
-                name: `FlyingDoge NFT - Testnet ${number}`,
+                name: `Box #${number}`,
                 image: '/images/luckybox/box0.png',
                 comfy: '0',
                 efficiency: '0',

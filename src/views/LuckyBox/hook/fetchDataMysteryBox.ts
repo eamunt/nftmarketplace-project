@@ -6,6 +6,7 @@ import mysteryBoxAbi from 'config/abi/mysteryBox.json';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import coreBuyNFTAbi from '../../../config/abi/coreBuyNFTAbi.json';
+import coreTokenAbi from '../../../config/abi/coreTokenAbi.json';
 
 export const FetchDataRunBoxIsOpen = (idMysteryBox, chainId: number) => {
     const [dataBox, setDataBox] = useState({
@@ -65,7 +66,11 @@ export const FetchDataNft = (account: string, chainId: number) => {
                 console.log(e);
             }
         };
-        fetchDataBox();
+        if (account != null) {
+            fetchDataBox();
+        } else {
+            setNftBalance(0);
+        }
     }, [account]);
     return { nftBalance };
 };
@@ -90,7 +95,11 @@ export const FetchNFTBalance = (account: string, chainId: number) => {
                 console.log(e);
             }
         };
-        fetchDataBox();
+        if (account != null) {
+            fetchDataBox();
+        } else {
+            setNftBalance(0);
+        }
     }, [account]);
 
     return { nftBalance };
@@ -117,7 +126,11 @@ export const TokenIdArray = (account: string, chainId: number, nftBalance: numbe
             }
             setTokenId(arr);
         };
-        fetchDataBox();
+        if (account != null) {
+            fetchDataBox();
+        } else {
+            setTokenId([]);
+        }
     }, [account, chainId, nftBalance]);
 
     return { tokenIdArr };
@@ -125,8 +138,8 @@ export const TokenIdArray = (account: string, chainId: number, nftBalance: numbe
 
 export const GetPriceNft = (chainId: number) => {
     const [priceArr, setPriceArr] = useState([]);
-    const arr = [];
     useEffect(() => {
+        const arr1 = [];
         const fetchDataBox = async () => {
             for (let i = 0; i < 3; i++) {
                 const callBoxId = [
@@ -139,14 +152,71 @@ export const GetPriceNft = (chainId: number) => {
                 const idRunBox = await multicall(coreBuyNFTAbi, callBoxId, chainId);
                 const index = new BigNumber(idRunBox.toString()).toNumber();
                 // setTokenId(index);
-                arr.push(index / 1e18);
-                console.log(i, arr);
+                arr1.push(index / 1e18);
             }
 
-            setPriceArr(arr);
+            setPriceArr(arr1);
         };
-        fetchDataBox();
-    }, []);
+        if (chainId != null) {
+            fetchDataBox();
+        } else {
+            setPriceArr([]);
+        }
+    }, [chainId]);
 
     return { priceArr };
+};
+
+export const GetAllowance = (account: string, spender: string, chainId: number) => {
+    const [allowanceVar, setAllowanceVar] = useState(0);
+    useEffect(() => {
+        // get Allowance
+        const fetchDataBox = async () => {
+            const callBoxId = [
+                {
+                    address: getAddress(contracts.coreToken, chainId),
+                    name: 'allowance',
+                    params: [account, spender],
+                },
+            ];
+            const idRunBox = await multicall(coreTokenAbi, callBoxId, chainId);
+            const index = new BigNumber(idRunBox.toString()).toNumber();
+            // setTokenId(index);
+            setAllowanceVar(index / 1e18);
+        };
+        if (account != null) {
+            fetchDataBox();
+        } else {
+            setAllowanceVar(0);
+        }
+    }, [account, chainId]);
+
+    return { allowanceVar };
+};
+
+export const GetTokenBalanceOf = (account: string, chainId: number) => {
+    const [tokenBalanceOf, setTokenBalanceOf] = useState(0);
+    // get balanceOf
+    useEffect(() => {
+        const fetchDataBox = async () => {
+            const callBoxId = [
+                {
+                    address: getAddress(contracts.coreToken, chainId),
+                    name: 'balanceOf',
+                    params: [account],
+                },
+            ];
+            const idRunBox = await multicall(coreTokenAbi, callBoxId, chainId);
+            const index = new BigNumber(idRunBox.toString()).toNumber();
+            // setTokenId(index);
+            setTokenBalanceOf(index / 1e18);
+        };
+        if (account != null) {
+            fetchDataBox();
+        } else {
+            setTokenBalanceOf(0);
+        }
+    }, [account]);
+
+    return { tokenBalanceOf };
 };
