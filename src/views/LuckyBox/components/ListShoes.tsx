@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import { Text, Flex, Button } from '@pancakeswap/uikit';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import CardShoes from './CardShoes';
-import { FetchNFTBalance, GetAllowance, GetPriceNft, GetTokenBalanceOf } from '../hook/fetchDataMysteryBox';
+import {
+    FetchNFTBalance,
+    GetAllowance,
+    GetPriceNft,
+    GetTokenBalanceOf,
+    ListProduct,
+} from '../hook/fetchDataMysteryBox';
 
 import { useApprove } from '../hook/useApprove';
 import { useBuyNFT } from '../hook/useBuyNft';
@@ -18,47 +24,58 @@ const ListShoes: React.FC<Props> = () => {
     const { nftBalance } = FetchNFTBalance(account, chainId);
     const { priceArr } = GetPriceNft(chainId);
     // console.log('pri', priceArr);
-    const [currentItems, setCurrentItems] = useState([]);
-    const { allowanceVar } = GetAllowance(account, '0xC24899C146835c6566629652152eae44210A96F6', chainId);
     const { tokenBalanceOf } = GetTokenBalanceOf(account, chainId);
     // console.log('tokenBalanceOf', tokenBalanceOf);
     function onRefresh(newValue: number) {
         setRefresh(newValue);
     }
-    const arr = [];
-    const nameArray = ['Silver', 'Gold', 'Ruby'];
-    useEffect(() => {
-        priceArr.forEach((price, i) => {
-            const temp = {
-                ID: i,
-                name: `${nameArray[i]} box`,
-                image: `/images/luckybox/box${i}.png`,
-                comfy: '0',
-                efficiency: '0',
-                luck: '0',
-                sturdence_remain: '0',
-                nftType: i,
-                nftPrice: price,
-            };
-            arr.push(temp);
-        });
-        setCurrentItems(arr);
-    }, [priceArr]);
 
     // currentItems.forEach((j) => {
     //     console.log(j);
     // });
     const [tyToken, setTyToken] = useState(-1);
-    const { handleApprove } = useApprove(1116, '0x585b34473CEac1D60BD9B9381D6aBaF122008504');
+    const [checkApproved, setCheckApproved] = useState(false);
+
+    const { handleApprove, requestedApproval } = useApprove(
+        1116,
+        '0x585b34473CEac1D60BD9B9381D6aBaF122008504',
+        checkApproved,
+    );
+
+    const { allowanceVar } = GetAllowance(
+        account,
+        '0xC24899C146835c6566629652152eae44210A96F6',
+        chainId,
+        requestedApproval,
+    );
+
+    const [currentItems, setCurrentItems] = useState([]);
     const { handleBuy } = useBuyNFT(chainId, onRefresh, tyToken);
     // console.log('baba 0.3');
     const onHandleApprove = () => {
-        handleApprove();
+        setCheckApproved(true);
     };
+
+    useEffect(() => {
+        const arr = ListProduct(priceArr);
+        console.log('arr1', arr);
+        setCurrentItems([...arr]);
+    }, [checkApproved, requestedApproval, tokenBalanceOf, account]);
+
     const onHandleBuyItem = ({ nftType }) => {
         console.log('baba 0');
         setTyToken(nftType);
     };
+
+    useEffect(() => {
+        handleApprove();
+        // set lai ve false
+        setCheckApproved(false);
+        if (requestedApproval === true) {
+            const arr = ListProduct(priceArr);
+            setCurrentItems([...arr]);
+        }
+    }, [checkApproved, requestedApproval]);
 
     useEffect(() => {
         console.log('baba');

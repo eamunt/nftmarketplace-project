@@ -61,14 +61,15 @@ const CardShoes: React.FC<PropsCard> = ({
                 </Flex>
                 {allowanceVar1 < nftPrice && tokenBalanceOf1 >= nftPrice ? (
                     <Button onClick={handleApprove1}>Approve</Button>
-                ) : null}
-                <Button
-                    onClick={() => {
-                        onBuyItem({ nftType });
-                    }}
-                >
-                    {nftPrice}
-                </Button>
+                ) : (
+                    <Button
+                        onClick={() => {
+                            onBuyItem({ nftType });
+                        }}
+                    >
+                        Buy {nftPrice}
+                    </Button>
+                )}
             </Container>
         </>
     );

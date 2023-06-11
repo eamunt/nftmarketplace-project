@@ -167,7 +167,28 @@ export const GetPriceNft = (chainId: number) => {
     return { priceArr };
 };
 
-export const GetAllowance = (account: string, spender: string, chainId: number) => {
+export const ListProduct = (priceArr: any) => {
+    const nameArray = ['Silver', 'Gold', 'Ruby'];
+    const arr = [];
+    if (priceArr) {
+        priceArr.forEach((price, i) => {
+            arr.push({
+                ID: i,
+                name: `${nameArray[i]} box`,
+                image: `/images/luckybox/box${i}.png`,
+                comfy: '0',
+                efficiency: '0',
+                luck: '0',
+                sturdence_remain: '0',
+                nftType: i,
+                nftPrice: price,
+            });
+        });
+    }
+    return arr;
+};
+
+export const GetAllowance = (account: string, spender: string, chainId: number, getRequestApproval: any) => {
     const [allowanceVar, setAllowanceVar] = useState(0);
     useEffect(() => {
         // get Allowance
@@ -184,12 +205,20 @@ export const GetAllowance = (account: string, spender: string, chainId: number) 
             // setTokenId(index);
             setAllowanceVar(index / 1e18);
         };
-        if (account != null) {
+
+        // da connect wallet nhung chua approve
+        if (account != null && !getRequestApproval) {
             fetchDataBox();
         } else {
             setAllowanceVar(0);
         }
-    }, [account, chainId]);
+        /// approved
+        if (getRequestApproval) {
+            fetchDataBox();
+        } else {
+            setAllowanceVar(0);
+        }
+    }, [account, chainId, getRequestApproval]);
 
     return { allowanceVar };
 };
