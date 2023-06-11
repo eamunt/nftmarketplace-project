@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Button } from '@pancakeswap/uikit';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import { FetchDataNft } from '../hook/fetchDataMysteryBox';
+import { FetchDataNft, GetDataFromVercel } from '../hook/fetchDataMysteryBox';
 import CardShoes from './CardShoes';
-import { TokenIdArray, FetchNFTBalance } from '../../LuckyBox/hook/fetchDataMysteryBox';
+import { TokenIdArray, FetchNFTBalance, GetPriceNft } from '../../LuckyBox/hook/fetchDataMysteryBox';
 
 interface Props {
     filter?: number;
@@ -15,25 +15,11 @@ const ListShoes: React.FC<Props> = () => {
     const { account, chainId } = useActiveWeb3React();
     const { nftBalance } = FetchNFTBalance(account, chainId);
     const { tokenIdArr } = TokenIdArray(account, chainId, nftBalance);
-    const [currentItems, setCurrentItems] = useState([]);
-    const arr = [];
-    useEffect(() => {
-        tokenIdArr.forEach((number) => {
-            const temp = {
-                token_id: number,
-                name: `Box #${number}`,
-                image: '/images/luckybox/box0.png',
-                comfy: '0',
-                efficiency: '0',
-                luck: '0',
-                sturdence_remain: '0',
-                nftType: 'haha',
-                nftPrice: 1,
-            };
-            arr.push(temp);
-        });
-        setCurrentItems(arr);
-    }, [tokenIdArr]);
+    console.log('hello54');
+    const { currentItems } = GetDataFromVercel(account, chainId, tokenIdArr);
+
+    console.log('hello3', nftBalance);
+    console.log('hello5', tokenIdArr);
 
     return (
         <CsFlexContainer width="100%" flexDirection="column" mt="3rem" height="auto" minHeight="50vh">

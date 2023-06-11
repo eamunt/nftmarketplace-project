@@ -37,7 +37,7 @@ const CardShoes: React.FC<PropsCard> = ({
     return (
         <Container>
             <Flex width="100%" flexDirection="column">
-                <CustomCard background={renderBGCard(Number(nftType))}>
+                <CustomCard>
                     <ImgShoes src={nftImage} alt="Image Box" />
                 </CustomCard>
                 <Flex marginTop="10px" width="100%" justifyContent="space-between" alignItems="center">

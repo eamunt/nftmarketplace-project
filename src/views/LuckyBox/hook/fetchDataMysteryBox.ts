@@ -107,9 +107,9 @@ export const FetchNFTBalance = (account: string, chainId: number) => {
 
 export const TokenIdArray = (account: string, chainId: number, nftBalance: number) => {
     const [tokenIdArr, setTokenId] = useState([]);
-    const arr = [];
     useEffect(() => {
         const fetchDataBox = async () => {
+            const arr = [];
             for (let i = 0; i < nftBalance; i++) {
                 const callBoxId = [
                     {
@@ -139,8 +139,8 @@ export const TokenIdArray = (account: string, chainId: number, nftBalance: numbe
 export const GetPriceNft = (chainId: number) => {
     const [priceArr, setPriceArr] = useState([]);
     useEffect(() => {
-        const arr1 = [];
         const fetchDataBox = async () => {
+            const arr1 = [];
             for (let i = 0; i < 3; i++) {
                 const callBoxId = [
                     {
